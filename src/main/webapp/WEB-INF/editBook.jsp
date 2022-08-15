@@ -16,30 +16,35 @@
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
 <body class="bg-dark">
 	<nav class="navbar navbar-dark bg-dark p-2">
-		<h1 class="display-3 text-light">Welcome ${user.fullName}!</h1>
+		<h1 class="display-3 text-light">Welcome ${loggedUser.getFullName()}!</h1>
 		<div class="d-flex align-items-center gap-3">
-			<a class="badge badge-primary" href="/books">back to the shelves</a>
+			<a class="badge badge-primary" href="/dashboard">back to the shelves</a>
 			<a class="btn btn-danger" href="/logout">Logout</a>
 		</div>
 	</nav>
 	<div class="container-fluid bg-warning text-dark p-3">
-		<h2 class="display-5">Change your Entry</h2>
 		<div class="container">
-			<form:form action="/books/${book.id}/edit" method="post" modelAttribute="book">
-				<form:errors path="*"/>
+			<h2 class="display-5">Change your Entry</h2>
+			<form:form class="container rounded p-3 bg-dark text-light" action="/books/edit/${book.id}" method="post" modelAttribute="book">
+				<input type="hidden" name="_method" value="put">
 				<div>
 					<form:label class="form-label" path="title">Title:</form:label>
-					<form:input class="form-control" type="text" path="title" value="${book.title}"/>
+					<form:input class="form-control mb-2" type="text" path="title" value="${book.title}"/>
+					<form:errors class="text-danger" path="title"/>
 				</div>
 				<div>
 					<form:label class="form-label" path="author">Author:</form:label> 
-					<form:input class="form-control" type="text" path="author" value="${book.author}"/>
+					<form:input class="form-control mb-2" type="text" path="author" value="${book.author}"/>
+					<form:errors class="text-danger" path="author"/>
 				</div>
 				<div>
 					<form:label class="form-label" path="thoughts">My thoughts:</form:label>
-					<form:input class="form-control" type="text" path="thoughts" value="${book.thoughts}"/>
+					<form:input class="form-control mb-2" type="text" path="thoughts" value="${book.thoughts}"/>
+					<form:errors class="text-danger" path="thoughts"/>
 				</div>
-				<button class="btn btn-warning my-4" type="submit">Submit</button>
+				<div class="d-flex justify-content-end">
+					<button class="btn btn-warning mt-2" type="submit">Submit</button>
+				</div>
 			</form:form>
 		</div>
 	</div>

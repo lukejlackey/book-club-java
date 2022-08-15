@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,15 +28,18 @@ public class Book {
 	private Long id;
 	
 	@NotNull
-	@Size(min=3, max=200)
+	@NotEmpty(message = "Title field is required.")
+	@Size(min=3, max=200, message="Must be between 3 and 200 characters.")
 	private String title;
 	
 	@NotNull
-	@Size(min=3, max=200)
+	@NotEmpty(message = "Author field is required.")
+	@Size(min=3, max=200, message="Must be between 3 and 200 characters.")
 	private String author;
 	
 	@NotNull
-	@Size(min=10, max=1000)
+	@NotEmpty(message = "My Thoughts field is required.")
+	@Size(min=10, max=500, message="Must be between 10 and 500 characters.")
 	private String thoughts;
 	
 	@Column(updatable=false)

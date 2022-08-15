@@ -17,48 +17,52 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotNull
-	@Size(min=3, max=100)
+	@NotEmpty(message = "First Name is required.")
+	@Size(min = 3, max = 100, message = "Must be between 3 and 100 characters.")
 	private String firstName;
-	
+
 	@NotNull
-	@Size(min=3, max=100)
+	@NotEmpty(message = "Last Name is required.")
+	@Size(min = 3, max = 100, message = "Must be between 3 and 100 characters.")
 	private String lastName;
-	
+
 	@NotNull
-	@Email(message="Please enter a valid email.")
+	@NotEmpty(message = "Email is required.")
+	@Email(message = "Please enter a valid email.")
 	private String email;
-	
-	@NotEmpty(message="Password is required!")
-    @Size(min=8, max=128, message="Password must be between 8 and 128 characters")
-    private String password;
-	
-    @Transient
-    @NotEmpty(message="Confirm Password is required!")
-    @Size(min=8, max=128, message="Confirm Password must be between 8 and 128 characters")
-    private String confirm;
-	
-	@Column(updatable=false)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+
+	@NotNull
+	@NotEmpty(message = "Password is required.")
+	@Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,128}$", message = "Must be between 8 and 128 characters and contain: 1 upper, 1 lower, 1 digit, 1 special character.")
+	private String password;
+
+	@Transient
+	@NotEmpty(message = "Confirm Password is required.")
+	private String confirm;
+
+	@Column(updatable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
-	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updatedAt;
-	
-    @OneToMany(mappedBy="book", fetch = FetchType.LAZY)
-    private List<Book> books;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Book> books;
 
 	public User() {
 	}
@@ -85,6 +89,10 @@ public class User {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public String getFullName() {
+		return firstName + " " + lastName;
 	}
 
 	public Date getCreatedAt() {
@@ -134,12 +142,12 @@ public class User {
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}
-	
+
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
 	}
-	
+
 	@PreUpdate
 	protected void onUpdate() {
 		this.updatedAt = new Date();
