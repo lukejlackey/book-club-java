@@ -43,7 +43,8 @@ public class HomeController {
 			HttpSession session) {
 		User newUser = userService.registerUser(user, result);
 		if (result.hasErrors() || newUser == null) {
-			return "redirect:/";
+			model.addAttribute("loginUser", new LoginUser());
+			return "loginReg.jsp";
 		}
 		session.setAttribute("loggedUserId", newUser.getId());
 		return "redirect:/dashboard";
@@ -54,7 +55,8 @@ public class HomeController {
 			HttpSession session) {
 		User loggedUser = userService.login(loginUser, result);
 		if (result.hasErrors() || loggedUser == null) {
-			return "redirect:/";
+			model.addAttribute("user", new User());
+			return "loginReg.jsp";
 		}
 		session.setAttribute("loggedUserId", loggedUser.getId());
 		return "redirect:/dashboard";
